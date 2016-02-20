@@ -2,6 +2,9 @@ package game;
 
 public class Game {
 
+    final static int WIDTH = 74;
+    final static int HEIGHT = 20;
+	
 	int score = 0;
 	
 	public static void main(String args[]){
@@ -20,7 +23,4 @@ public class Game {
 		
 	}
 	
-	public static void repaint(){
-		
-	}
 }

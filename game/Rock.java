@@ -1,12 +1,15 @@
 package game;
 
-public class Rock {
+import java.util.Random;
 
-	boolean isRock;
-	boolean isShip;
-	
-	Rock(boolean ship, boolean rock){
-		isShip = ship;
-		isRock = rock;
+public class Rock extends SpaceObj{
+
+	Rock(int height, int width) {
+		printOut = "#";
+		Random rand = new Random();
+		xcor = rand.nextInt((width) + 1);;
+		ycor = height;
 	}
+	
+
 }
