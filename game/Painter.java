@@ -1,3 +1,5 @@
+package game;
+
 import java.util.concurrent.*;
 import static java.lang.Math.*;
 import java.util.*;
@@ -50,7 +52,7 @@ public class Painter {
 		System.out.println(line);
 	}
 
-	void updateScreen(Ship ship, ArrayList<SpaceObj> rocks) {
+	void updateScreen(SpaceObj ship, ArrayList<SpaceObj> rocks) {
 		
 		this.resetScreen(74, 60);
 		
@@ -64,7 +66,7 @@ public class Painter {
 		
 	}
 	
-	void paint(Ship ship, ArrayList<SpaceObj> rocks) {
+	void paint(SpaceObj ship, ArrayList<SpaceObj> rocks) {
 		this.updateScreen(ship, rocks);
 		this.printScreen(74);
 	}
