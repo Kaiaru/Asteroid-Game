@@ -1,11 +1,13 @@
 package game;
 
 import java.util.*;
+import java.awt.event.KeyListener;
 
 public class Game {
 
-	final static int WIDTH = 74;
-	final static int HEIGHT = 75;
+	final static int HEIGHT = 10;
+	final static int WIDTH = 30;
+	
 
 	static ArrayList<SpaceObj> rockList;
 	static Painter gamePainter;
@@ -18,10 +20,7 @@ public class Game {
 	static int numRocksToAdd = 6;
 
 	static boolean running;
-	static double timeOne = (double) System.nanoTime() / 1000000000; // convert
-																		// to
-																		// double
-																		// seconds
+	static double timeOne = (double) System.nanoTime() / 1000000000; // convert to seconds
 	static double timeTwo;
 
 	public static void main(String args[]) {
@@ -55,7 +54,20 @@ public class Game {
 		}
 
 		for (SpaceObj rock : rockList) {
-			rock.ycor -= 1;
+			if (rock.ycor >= 1){
+				rock.ycor -= 1;
+			}
+			else{
+				rock = null;
+			}
+		}
+		
+		if(Key.left.isDown){
+			playerShip.xcor += 1;
+		}
+		
+		if(Key.right.isDown){
+			playerShip.xcor -= 1;
 		}
 
 	}
@@ -71,6 +83,7 @@ public class Game {
 
 			while (timePassed >= timePerTick) {
 				updateFixedLogic();
+				tickCounter += 1;
 				timePassed -= timePerTick;
 			}
 
