@@ -1,3 +1,3 @@
-ECHO
+@ECHO off
 java -jar RockGame.jar
 set /p DUMMY=Hit ENTER to continue...
