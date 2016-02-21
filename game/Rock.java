@@ -7,7 +7,7 @@ public class Rock extends SpaceObj{
 	Rock(int height, int width) {
 		printOut = "#";
 		Random rand = new Random();
-		xcor = 10;
+		xcor = rand.nextInt(width - 2) + 1;
 		ycor = height-1;
 	}
 	
