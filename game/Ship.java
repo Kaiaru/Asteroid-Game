@@ -6,7 +6,7 @@ public class Ship extends SpaceObj {
 
 	Ship(int width) {
 		printOut = "^";
-		xcor = (int) Math.floor(width/2);
+		xcor = width/2;
 		ycor = 1;
 	}
 

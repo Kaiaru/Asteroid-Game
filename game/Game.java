@@ -9,7 +9,7 @@ import java.util.zip.*;
 
 public class Game {
 
-	final static int HEIGHT = 22;
+	final static int HEIGHT = 25;
 	final static int WIDTH = 30;
 	
 
@@ -19,20 +19,22 @@ public class Game {
 	static ConsoleReader reader;
 	static int score;
 
-	static double timePerTick = 0.5;
-	static int ticksTillAdd = 5;
-	static int tickCounter = 5; // adds rocks immediately
+	static double timePerTick = 0.2;
+	static int ticksTillAdd = 3;
+	static int tickCounter = 3; // adds rocks immediately
 	static int numRocksToAdd = 6;
 	
 	static boolean leftMove = false;
 	static boolean rightMove = false;
+	static boolean upMove = false;
+	static boolean downMove = false;
 	
 
 	static boolean running;
 	static double timeOne = (double) System.nanoTime() / 1000000000; // convert to seconds
 	static double timeTwo;
 	
-	static char[] allowed = {'a','d'};
+	static char[] allowed = {'w','a','s','d'};
 
 	public static void main(String args[]) throws IOException {
 
@@ -45,21 +47,20 @@ public class Game {
 
 		playerShip = new Ship(WIDTH);
 		gamePainter.paint(playerShip, rockList);
+		
+		//makes a thread for the consoleReader
+		backThread bThread = new backThread();
+		Thread t = new Thread(bThread);
+		t.start();
 
 		mainLoop();
+		
+		bThread.quit();
 
 	}
 
 	public static void updateDynamicLogic(double passedTime){
 		// Dynamic logic based on timePassed if ever needed
-		try {
-			int i = 0;
-			i = reader.readCharacter(allowed);
-			processChar(i);
-		} 	
-		catch (IOException e) {
-			e.printStackTrace();
-		}
     }
 
 	public static void updateFixedLogic(){
@@ -67,16 +68,7 @@ public class Game {
 		
 		score += 100;
 		
-		if(rightMove){
-			playerShip.xcor += 1;
-			rightMove = false;
-		}
-		
-		if(leftMove){
-			playerShip.xcor -= 1.3;
-			System.out.println("did");
-			leftMove = false;
-		}
+		//System.out.println(playerShip.xcor + " " + playerShip.ycor);
 		
 
 		if (tickCounter == ticksTillAdd) { // adds rocks each ticksTillAdd
@@ -139,14 +131,67 @@ public class Game {
 		return deltaTime;
 	}
 	
-	public static void processChar(int i){
-		switch(i){
-			case 'a':
-				leftMove = true;
-			case 'd':
-				rightMove = true;
-
+	
+	static class backThread implements Runnable{
+	//backThread class for the jline consoleReader in order to have continuous reading of inputs
+		boolean running = true;
+		
+		@Override 
+		public void run(){
+			while(running){
+				try {
+					int i = 0;
+					i = reader.readCharacter(allowed);
+					processChar(i);
+				} 	
+				catch (IOException e) {
+					e.printStackTrace();
+				}
+				
+				if(rightMove){
+					playerShip.xcor += 1;
+					rightMove = false;
+				}
+		
+				else if(leftMove){
+					playerShip.xcor -= 1;
+					leftMove = false;
+				}
+		
+				else if(upMove){
+					playerShip.ycor += 1;
+					upMove = false;
+				}
+		
+				else if(downMove){
+					playerShip.ycor -= 1;
+					downMove = false;
+				}
+				
+			}
+		}
+		
+		public void quit() {
+			running = false;
+		}
+		
+		public void processChar(int i){
+		//process the character input
+			switch(i){
+				case 'w':
+					upMove = true;
+					break;
+				case 's':
+					downMove = true;
+					break;
+				case 'a':
+					leftMove = true;
+					break;
+				case 'd':
+					rightMove = true;
+					break;
 		}
     }
+	}
 
 }

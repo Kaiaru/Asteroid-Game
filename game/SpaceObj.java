@@ -2,12 +2,20 @@ package game;
 
 public class SpaceObj {
 	
-	protected int xcor;
-	protected int ycor;
-	protected String printOut;
+	public int xcor;
+	public int ycor;
+	public String printOut;
 	
 	SpaceObj(){
 		printOut = " ";
+	}
+	
+	public void setYcor(int newCor){
+		ycor = newCor;
+	}
+	
+	public int getYcor(){
+		return ycor;
 	}
 	
 }
