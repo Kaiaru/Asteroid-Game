@@ -1,4 +1,4 @@
-package game;
+//package game;
 
 import java.util.concurrent.*;
 import jline.*;
@@ -17,11 +17,14 @@ public class Game {
 	private SpaceObj playerShip;
 	private int score;
 
-	private double timePerTick = 0.2;
-	private int ticksTillAdd = 3;
-	private int tickCounter = 3; // adds rocks immediately
-	private int numRocksToAdd = 6;
+	private int gameDifficulty = 1;
+	private double timePerTick = 0.2 * gameDifficulty;
+	private int ticksTillAdd = gameDifficulty * 3;
+	private int tickCounter = ticksTillAdd; // adds rocks immediately
+	private int numRocksToAdd = 12 / gameDifficulty;
 
+	private char[] allowed = {'1','2','3'};
+	
 	private boolean running;
 	private double timeOne = (double) System.nanoTime() / 1000000000; // convert to seconds
 	private double timeTwo;
@@ -39,6 +42,13 @@ public class Game {
 		cGame.running = true;
 
 		cGame.playerShip = new Ship(WIDTH);
+		
+		//gets game difficulty
+		reader = new ConsoleReader(System.in, new PrintWriter(System.out));
+		int i = 0;   
+		i = reader.readCharacter(allowed);		
+		cGame.processChar(i);
+		
 		cGame.gamePainter.paint(cGame.playerShip, cGame.rockList);
 		
 		//makes a thread for the consoleReader
@@ -52,6 +62,11 @@ public class Game {
 
 	}
 
+	public void processChar(int i){
+		//process the character input
+			gameDifficulty = i;
+		}
+	
 	public void updateDynamicLogic(double passedTime){
 		// Dynamic logic based on timePassed if ever needed
     }
