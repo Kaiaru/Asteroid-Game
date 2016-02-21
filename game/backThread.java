@@ -25,7 +25,7 @@ public class backThread implements Runnable{
 		
 		private SpaceObj playerShip;
 		
-		private char[] allowed = {'w','a','s','d'};
+		private char[] allowed = {'w','a','s','d', ' '};
 	
 		
 		public backThread(SpaceObj pShip, int h, int w) throws IOException{
@@ -70,10 +70,10 @@ public class backThread implements Runnable{
 				}
 				
 				//ship hits a wall
-				if(playerShip.getXcor() == width || playerShip.getXcor() == 0){
+				if(playerShip.getXcor() == width-1 || playerShip.getXcor() == 0){
 					quit();
 				}
-				if(playerShip.getYcor() == height || playerShip.getYcor() == 0){
+				if(playerShip.getYcor() == height-1 || playerShip.getYcor() == 0){
 					quit();
 				}
 				

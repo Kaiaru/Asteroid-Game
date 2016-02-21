@@ -39,6 +39,8 @@ public class Game {
 		cGame.running = true;
 
 		cGame.playerShip = new Ship(WIDTH);
+		
+		
 		cGame.gamePainter.paint(cGame.playerShip, cGame.rockList);
 		
 		//makes a thread for the consoleReader
