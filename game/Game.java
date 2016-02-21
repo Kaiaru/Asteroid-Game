@@ -13,6 +13,7 @@ public class Game {
 	final static int WIDTH = 30;
 
 	private ArrayList<SpaceObj> rockList;
+	private ArrayList<SpaceObj> bombList;
 	private Painter gamePainter;
 	private SpaceObj playerShip;
 	private int score;
@@ -39,8 +40,6 @@ public class Game {
 		cGame.running = true;
 
 		cGame.playerShip = new Ship(WIDTH);
-		
-		
 		cGame.gamePainter.paint(cGame.playerShip, cGame.rockList);
 		
 		//makes a thread for the consoleReader
@@ -66,10 +65,13 @@ public class Game {
 		//System.out.println(playerShip.xcor + " " + playerShip.ycor);
 		
 
-		if (tickCounter == ticksTillAdd) { // adds rocks each ticksTillAdd
+		if ((tickCounter % 3) == ticksTillAdd) { // adds rocks each ticksTillAdd
 			for (int x = 0; x < numRocksToAdd; x++) {
 				rockList.add(new Rock(HEIGHT, WIDTH));
 			}
+		}
+		if(tickCounter == ticksTillAdd *15){
+			bombList.add(new Bomb(HEIGHT, WIDTH);
 			tickCounter = 0;
 		}
 
@@ -82,11 +84,26 @@ public class Game {
 				rock = null; //deletes the rock if it hits the bottom
 			}
 		}
+		for (SpaceObj bomb : bombList) {
+			if (bomb.getYcor() >= 1){
+				bomb.setYcor(bomb.getYcor() - 1);
+			}
+			else{
+				bomb = null; //deletes the rock if it hits the bottom
+			}
+		}
+		
 		
 		//collision code
 		for (SpaceObj rock : rockList){
 			if (rock.getXcor() == playerShip.getXcor() && rock.getYcor() == playerShip.getYcor()){
 				running = false;
+			}
+		}
+		
+		for (SpaceObj bomb : bombList){
+			if (bomb.getXcor() == playerShip.getXcor() && bomb.getYcor() == playerShip.getYcor()){
+				playerShip.setBomb(true);
 			}
 		}
 

@@ -25,7 +25,7 @@ public class backThread implements Runnable{
 		private ConsoleReader reader;
 		
 		private SpaceObj playerShip;
-		private ArrayList<SpaceObj> rockList;
+		private ArrayList<SpaceObj> rocklList;
 		
 		private char[] allowed = {'w','a','s','d', ' '};
 	
