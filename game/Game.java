@@ -16,30 +16,20 @@ public class Game {
 	static ArrayList<SpaceObj> rockList;
 	static Painter gamePainter;
 	static SpaceObj playerShip;
-	static ConsoleReader reader;
 	static int score;
 
 	static double timePerTick = 0.2;
 	static int ticksTillAdd = 3;
 	static int tickCounter = 3; // adds rocks immediately
 	static int numRocksToAdd = 6;
-	
-	static boolean leftMove = false;
-	static boolean rightMove = false;
-	static boolean upMove = false;
-	static boolean downMove = false;
-	
 
 	static boolean running;
 	static double timeOne = (double) System.nanoTime() / 1000000000; // convert to seconds
 	static double timeTwo;
-	
-	static char[] allowed = {'w','a','s','d'};
 
 	public static void main(String args[]) throws IOException {
 
 		// initial setup and then calls the mainLoop();
-		reader = new ConsoleReader(System.in, new PrintWriter(System.out));
 		rockList = new ArrayList<SpaceObj>();
 		gamePainter = new Painter(HEIGHT, WIDTH);
 		score = 0;
@@ -49,7 +39,7 @@ public class Game {
 		gamePainter.paint(playerShip, rockList);
 		
 		//makes a thread for the consoleReader
-		backThread bThread = new backThread();
+		backThread bThread = new backThread(playerShip);
 		Thread t = new Thread(bThread);
 		t.start();
 
@@ -131,67 +121,4 @@ public class Game {
 		return deltaTime;
 	}
 	
-	
-	static class backThread implements Runnable{
-	//backThread class for the jline consoleReader in order to have continuous reading of inputs
-		boolean running = true;
-		
-		@Override 
-		public void run(){
-			while(running){
-				try {
-					int i = 0;
-					i = reader.readCharacter(allowed);
-					processChar(i);
-				} 	
-				catch (IOException e) {
-					e.printStackTrace();
-				}
-				
-				if(rightMove){
-					playerShip.xcor += 1;
-					rightMove = false;
-				}
-		
-				else if(leftMove){
-					playerShip.xcor -= 1;
-					leftMove = false;
-				}
-		
-				else if(upMove){
-					playerShip.ycor += 1;
-					upMove = false;
-				}
-		
-				else if(downMove){
-					playerShip.ycor -= 1;
-					downMove = false;
-				}
-				
-			}
-		}
-		
-		public void quit() {
-			running = false;
-		}
-		
-		public void processChar(int i){
-		//process the character input
-			switch(i){
-				case 'w':
-					upMove = true;
-					break;
-				case 's':
-					downMove = true;
-					break;
-				case 'a':
-					leftMove = true;
-					break;
-				case 'd':
-					rightMove = true;
-					break;
-		}
-    }
-	}
-
 }
