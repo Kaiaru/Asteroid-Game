@@ -10,20 +10,28 @@ import java.util.zip.*;
 public class backThread implements Runnable{
 	//backThread class for the jline consoleReader in order to have continuous reading of inputs
 	
-		boolean running = true;
-		boolean leftMove = false;
-		boolean rightMove = false;
-		boolean upMove = false;
-		boolean downMove = false;
+		private boolean running = true;
 		
-		ConsoleReader reader;
+		//the movement booleans
+		private boolean leftMove = false;
+		private boolean rightMove = false;
+		private boolean upMove = false;
+		private boolean downMove = false;
 		
-		SpaceObj playerShip;
+		private int width;
+		private int height;
 		
-		char[] allowed = {'w','a','s','d'};
+		private ConsoleReader reader;
+		
+		private SpaceObj playerShip;
+		
+		private char[] allowed = {'w','a','s','d'};
 	
 		
-		public backThread(SpaceObj pShip) throws IOException{
+		public backThread(SpaceObj pShip, int h, int w) throws IOException{
+			//contructor, takes in the playerShip; makes a ConsoleReader
+			height = h;
+			width = w;
 			playerShip = pShip;
 			reader = new ConsoleReader(System.in, new PrintWriter(System.out));
 		}
@@ -31,6 +39,7 @@ public class backThread implements Runnable{
 		@Override 
 		public void run(){
 			while(running){
+				//reads in the character from allowed and set the movement boolean
 				try {
 					int i = 0;
 					i = reader.readCharacter(allowed);
@@ -41,29 +50,38 @@ public class backThread implements Runnable{
 				}
 				
 				if(rightMove){
-					playerShip.xcor += 1;
+					playerShip.setXcor(playerShip.getXcor() + 1);
 					rightMove = false;
 				}
 		
 				else if(leftMove){
-					playerShip.xcor -= 1;
+					playerShip.setXcor(playerShip.getXcor() - 1);
 					leftMove = false;
 				}
 		
 				else if(upMove){
-					playerShip.ycor += 1;
+					playerShip.setYcor(playerShip.getYcor() + 1);
 					upMove = false;
 				}
 		
 				else if(downMove){
-					playerShip.ycor -= 1;
+					playerShip.setYcor(playerShip.getYcor() - 1);
 					downMove = false;
+				}
+				
+				//ship hits a wall
+				if(playerShip.getXcor() == width || playerShip.getXcor() == 0){
+					quit();
+				}
+				if(playerShip.getYcor() == height || playerShip.getYcor() == 0){
+					quit();
 				}
 				
 			}
 		}
 		
 		public void quit() {
+			//to quit the thread
 			running = false;
 		}
 		

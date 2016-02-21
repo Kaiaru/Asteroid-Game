@@ -1,3 +1,3 @@
 ECHO
 java -jar RockGame.jar
-pause
+set /p DUMMY=Hit ENTER to continue...

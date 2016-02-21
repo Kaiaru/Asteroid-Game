@@ -9,51 +9,54 @@ import java.util.zip.*;
 
 public class Game {
 
-	final static int HEIGHT = 25;
+	final static int HEIGHT = 24;
 	final static int WIDTH = 30;
+
+	private ArrayList<SpaceObj> rockList;
+	private Painter gamePainter;
+	private SpaceObj playerShip;
+	private int score;
+
+	private double timePerTick = 0.2;
+	private int ticksTillAdd = 3;
+	private int tickCounter = 3; // adds rocks immediately
+	private int numRocksToAdd = 6;
+
+	private boolean running;
+	private double timeOne = (double) System.nanoTime() / 1000000000; // convert to seconds
+	private double timeTwo;
 	
-
-	static ArrayList<SpaceObj> rockList;
-	static Painter gamePainter;
-	static SpaceObj playerShip;
-	static int score;
-
-	static double timePerTick = 0.2;
-	static int ticksTillAdd = 3;
-	static int tickCounter = 3; // adds rocks immediately
-	static int numRocksToAdd = 6;
-
-	static boolean running;
-	static double timeOne = (double) System.nanoTime() / 1000000000; // convert to seconds
-	static double timeTwo;
-
+	private backThread bThread;
+	private Thread t;
+	
 	public static void main(String args[]) throws IOException {
-
 		// initial setup and then calls the mainLoop();
-		rockList = new ArrayList<SpaceObj>();
-		gamePainter = new Painter(HEIGHT, WIDTH);
-		score = 0;
-		running = true;
+		Game cGame = new Game();
+		
+		cGame.rockList = new ArrayList<SpaceObj>();
+		cGame.gamePainter = new Painter(HEIGHT, WIDTH);
+		cGame.score = 0;
+		cGame.running = true;
 
-		playerShip = new Ship(WIDTH);
-		gamePainter.paint(playerShip, rockList);
+		cGame.playerShip = new Ship(WIDTH);
+		cGame.gamePainter.paint(cGame.playerShip, cGame.rockList);
 		
 		//makes a thread for the consoleReader
-		backThread bThread = new backThread(playerShip);
-		Thread t = new Thread(bThread);
-		t.start();
+		cGame.bThread = new backThread(cGame.playerShip, HEIGHT, WIDTH);
+		cGame.t = new Thread(cGame.bThread);
+		cGame.t.start();
 
-		mainLoop();
+		cGame.mainLoop();
 		
-		bThread.quit();
+		cGame.bThread.quit();
 
 	}
 
-	public static void updateDynamicLogic(double passedTime){
+	public void updateDynamicLogic(double passedTime){
 		// Dynamic logic based on timePassed if ever needed
     }
 
-	public static void updateFixedLogic(){
+	public void updateFixedLogic(){
 		// All Fixed time logic
 		
 		score += 100;
@@ -70,29 +73,30 @@ public class Game {
 
 		//moves rocks down
 		for (SpaceObj rock : rockList) {
-			if (rock.ycor >= 1){
-				rock.ycor -= 1;
+			if (rock.getYcor() >= 1){
+				rock.setYcor(rock.getYcor() - 1);
 			}
 			else{
-				rock = null;
+				rock = null; //deletes the rock if it hits the bottom
 			}
 		}
 		
 		//collision code
 		for (SpaceObj rock : rockList){
-			if (rock.xcor == playerShip.xcor && rock.ycor == playerShip.ycor){
+			if (rock.getXcor() == playerShip.getXcor() && rock.getYcor() == playerShip.getYcor()){
 				running = false;
 			}
 		}
 
 	}
 
-	public static void mainLoop() {
-		
+	public void mainLoop() {
+	//mainLoop for the game
+	
 		double timePassed = 0;
 		double deltaTime = 0;
 
-		while (running) {
+		while (running && t.isAlive()) {
 
 			updateDynamicLogic(deltaTime);
 
@@ -114,7 +118,8 @@ public class Game {
 
 	}
 
-	public static double getTimePassedAndResetTimer() {
+	public double getTimePassedAndResetTimer() {
+	//gets the amount of time passed and returns it
 		timeTwo = (double) System.nanoTime() / 1000000000;
 		double deltaTime = timeTwo - timeOne;
 		timeOne = timeTwo;

@@ -6,12 +6,12 @@ import java.util.*;
 
 public class Painter {
 
-	static StringBuilder[] screen;
-	static StringBuilder line;
-	static StringBuilder blank;
+	private static StringBuilder[] screen;
+	private static StringBuilder line;
+	private static StringBuilder blank;
 
-	int height;
-	int width;
+	private int height;
+	private int width;
 
 	Painter(int h, int w) {
 		
@@ -25,7 +25,7 @@ public class Painter {
 			blank.insert(1, ' ');
 
 		for (int i = 0; i < height; i++)
-			screen[i] = new StringBuilder(blank); // WHY?
+			screen[i] = new StringBuilder(blank);
 
 		line = new StringBuilder("");
 		for (int i = 0; i < width; i++)
@@ -60,12 +60,12 @@ public class Painter {
 		this.resetScreen(height, width);
 		
 		for(SpaceObj rock : rocks) {
-			screen[rock.ycor].deleteCharAt(rock.xcor);
-			screen[rock.ycor].insert(rock.xcor, rock.printOut);
+			screen[rock.getYcor()].deleteCharAt(rock.getXcor());
+			screen[rock.getYcor()].insert(rock.getXcor(), rock.getPrintOut());
 		}
 		
-		screen[ship.ycor].deleteCharAt(ship.xcor);
-		screen[ship.ycor].insert(ship.xcor, ship.printOut);
+		screen[ship.getYcor()].deleteCharAt(ship.getXcor());
+		screen[ship.getYcor()].insert(ship.getXcor(), ship.getPrintOut());
 		
 	}
 	

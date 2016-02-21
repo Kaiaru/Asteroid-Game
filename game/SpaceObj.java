@@ -1,10 +1,11 @@
 package game;
 
 public class SpaceObj {
+//generic object class that has xcor, ycor and printOut variables
 	
-	public int xcor;
-	public int ycor;
-	public String printOut;
+	protected int xcor;
+	protected int ycor;
+	protected String printOut;
 	
 	SpaceObj(){
 		printOut = " ";
@@ -18,4 +19,15 @@ public class SpaceObj {
 		return ycor;
 	}
 	
+	public void setXcor(int newCor){
+		xcor = newCor;
+	}
+	
+	public int getXcor(){
+		return xcor;
+	}
+	
+	public String getPrintOut(){
+		return printOut;
+	}
 }
