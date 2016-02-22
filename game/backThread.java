@@ -17,7 +17,6 @@ public class backThread implements Runnable{
 		private boolean rightMove = false;
 		private boolean upMove = false;
 		private boolean downMove = false;
-		private boolean useBomb = false;
 		
 		private int width;
 		private int height;
@@ -25,7 +24,6 @@ public class backThread implements Runnable{
 		private ConsoleReader reader;
 		
 		private SpaceObj playerShip;
-		private ArrayList<SpaceObj> rockList;
 		
 		private char[] allowed = {'w','a','s','d', ' '};
 	
@@ -35,15 +33,6 @@ public class backThread implements Runnable{
 			height = h;
 			width = w;
 			playerShip = pShip;
-			reader = new ConsoleReader(System.in, new PrintWriter(System.out));
-		}
-		
-		public backThread(SpaceObj pShip, int h, int w, ArrayList<SpaceObj> rocks) throws IOException{
-			//contructor, takes in the playerShip; makes a ConsoleReader
-			height = h;
-			width = w;
-			playerShip = pShip;
-			rockList = rocks;
 			reader = new ConsoleReader(System.in, new PrintWriter(System.out));
 		}
 		
@@ -80,22 +69,11 @@ public class backThread implements Runnable{
 					downMove = false;
 				}
 				
-				else if(useBomb){
-					if(pship.getBomb){
-					rockList.clear();
-					pship.setBomb(false);
-					}
-					useBomb = false
-					
-					
-				}
-				
-				
 				//ship hits a wall
-				if(playerShip.getXcor() == width || playerShip.getXcor() == 0){
+				if(playerShip.getXcor() == width-1 || playerShip.getXcor() == 0){
 					quit();
 				}
-				if(playerShip.getYcor() == height || playerShip.getYcor() == 0){
+				if(playerShip.getYcor() == height-1 || playerShip.getYcor() == 0){
 					quit();
 				}
 				
@@ -121,9 +99,6 @@ public class backThread implements Runnable{
 					break;
 				case 'd':
 					rightMove = true;
-					break;
-				case ' ':
-					useBomb = true;
 					break;
 		}
     }
