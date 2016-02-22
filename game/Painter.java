@@ -15,9 +15,10 @@ public class Painter {
 
 	Painter(int h, int w) {
 		
-		height = h;
-		width = w;
+		height = h; // height of the screen
+		width = w; // width of the screen
 
+		// creates the game screen
 		screen = new StringBuilder[height];
 
 		blank = new StringBuilder("||");
@@ -30,8 +31,22 @@ public class Painter {
 		line = new StringBuilder("");
 		for (int i = 0; i < width; i++)
 			line.append('_');
+		
+		// prints the start screen
+		printInitialScreen();
 	}
 
+	void printInitialScreen() {
+		// displays start screen
+		System.out.println(line);
+		System.out.println(line);
+		System.out.print("***ASTEROID FALLS***\n\nINSTRUCTIONS:\nCaptain! We've entered an asteroid field, maneuver our ship to safety! \nThe ship cannot sustain "
+		+ "an asteroid collision or the \ndimensional distortion of the wormhole walls! \nCollect other ship fragments for bombs to clear asteroids!"
+		+ "\n\nCONTROLS:\nw: up\ns: down\na: left\nd: right\nspace bar: bomb!\n\n CHOOSE YOUR DIFFICULTY:\n1: Hell\n2: Normal\n3: Easy\n");
+		System.out.println(line);
+		System.out.println(line);
+	}
+	
 	void resetScreen(int height, int width) {
 		screen = new StringBuilder[height];
 
@@ -47,6 +62,7 @@ public class Painter {
 			line.append('_');
 	}
 	
+	// prints the walls 
 	void printScreen(int height) {
 
 		System.out.println(line);
@@ -57,18 +73,22 @@ public class Painter {
 
 	void updateScreen(SpaceObj ship, ArrayList<SpaceObj> rocks) {
 		
+		// clears the screen
 		this.resetScreen(height, width);
 		
+		// adds the rocks to the StringBuilder
 		for(SpaceObj rock : rocks) {
 			screen[rock.getYcor()].deleteCharAt(rock.getXcor());
 			screen[rock.getYcor()].insert(rock.getXcor(), rock.getPrintOut());
 		}
 		
+		// adds ship to the StringBuilder
 		screen[ship.getYcor()].deleteCharAt(ship.getXcor());
 		screen[ship.getYcor()].insert(ship.getXcor(), ship.getPrintOut());
 		
 	}
 	
+	// updates the screen and prints it
 	void paint(SpaceObj ship, ArrayList<SpaceObj> rocks) {
 		this.updateScreen(ship, rocks);
 		this.printScreen(height);

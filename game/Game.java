@@ -17,17 +17,22 @@ public class Game {
 	private SpaceObj playerShip;
 	private int score;
 
-	private double timePerTick = 0.2;
+	private int gameDifficulty = 1;
+	private double timePerTick = 0.1;
 	private int ticksTillAdd = 3;
-	private int tickCounter = 3; // adds rocks immediately
-	private int numRocksToAdd = 6;
+	private int tickCounter = ticksTillAdd; // adds rocks immediately
+	private int numRocksToAdd = 12;
 
+	private char[] allowed = {'1','2','3'};
+	
 	private boolean running;
-	private double timeOne = (double) System.nanoTime() / 1000000000; // convert to seconds
+	private double timeOne;
 	private double timeTwo;
 	
 	private backThread bThread;
 	private Thread t;
+	
+	private ConsoleReader reader;
 	
 	public static void main(String args[]) throws IOException {
 		// initial setup and then calls the mainLoop();
@@ -40,7 +45,24 @@ public class Game {
 
 		cGame.playerShip = new Ship(WIDTH);
 		
+		//gets game difficulty
+		cGame.reader = new ConsoleReader(System.in, new PrintWriter(System.out));
+		int i = 0;   
+		i = cGame.reader.readCharacter(cGame.allowed);		
+		cGame.gameDifficulty = Character.getNumericValue(i);
 		
+		System.out.println(i);
+		
+		//sets all of the var relative to gameDifficulty
+		cGame.timePerTick = 0.1 * cGame.gameDifficulty;
+		cGame.ticksTillAdd = cGame.gameDifficulty * 3;
+		cGame.tickCounter = cGame.ticksTillAdd; // adds rocks immediately
+		cGame.numRocksToAdd = 12 / cGame.gameDifficulty;
+		
+		System.out.println(cGame.timePerTick + " " + cGame.ticksTillAdd+ " " + cGame.tickCounter+ " " + cGame.numRocksToAdd);
+		
+		
+		cGame.timeOne = (double) System.nanoTime() / 1000000000; // convert to seconds
 		cGame.gamePainter.paint(cGame.playerShip, cGame.rockList);
 		
 		//makes a thread for the consoleReader
@@ -53,7 +75,7 @@ public class Game {
 		cGame.bThread.quit();
 
 	}
-
+	
 	public void updateDynamicLogic(double passedTime){
 		// Dynamic logic based on timePassed if ever needed
     }
@@ -114,7 +136,8 @@ public class Game {
 			timePassed += deltaTime;
 
 		}
-
+		
+		System.out.println("Your ship and crew was forever lost, cast throughout the asteroid field...");
 		System.out.println("Game Over");
 		System.out.println("Your Score: " + score);
 
