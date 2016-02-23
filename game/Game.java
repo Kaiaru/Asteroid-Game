@@ -13,6 +13,7 @@ public class Game {
 	final static int WIDTH = 30;
 
 	private ArrayList<SpaceObj> rockList;
+	private ArrayList<SpaceObj> bombList;
 	private Painter gamePainter;
 	private SpaceObj playerShip;
 	private int score;
@@ -39,6 +40,7 @@ public class Game {
 		Game cGame = new Game();
 		
 		cGame.rockList = new ArrayList<SpaceObj>();
+		cGame.bombList = new ArrayList<SpaceObj>();
 		cGame.gamePainter = new Painter(HEIGHT, WIDTH);
 		cGame.score = 0;
 		cGame.running = true;
@@ -66,7 +68,7 @@ public class Game {
 		cGame.gamePainter.paint(cGame.playerShip, cGame.rockList);
 		
 		//makes a thread for the consoleReader
-		cGame.bThread = new backThread(cGame.playerShip, HEIGHT, WIDTH);
+		cGame.bThread = new backThread(cGame.playerShip, HEIGHT, WIDTH, cGame.rockList);
 		cGame.t = new Thread(cGame.bThread);
 		cGame.t.start();
 
@@ -88,10 +90,15 @@ public class Game {
 		//System.out.println(playerShip.xcor + " " + playerShip.ycor);
 		
 
-		if (tickCounter == ticksTillAdd) { // adds rocks each ticksTillAdd
+		if ((tickCounter % 4) == ticksTillAdd) { // adds rocks each ticksTillAdd
 			for (int x = 0; x < numRocksToAdd; x++) {
 				rockList.add(new Rock(HEIGHT, WIDTH));
 			}
+			
+		}
+		
+		if(tickCounter == ticksTillAdd * 15){
+			bombList.add(new Bomb(HEIGHT, WIDTH));
 			tickCounter = 0;
 		}
 
@@ -104,11 +111,24 @@ public class Game {
 				rock = null; //deletes the rock if it hits the bottom
 			}
 		}
+		for (SpaceObj bomb : bombList) {
+			if (bomb.getYcor() >= 1){
+				bomb.setYcor(bomb.getYcor() - 1);
+			}
+			else{
+				bomb = null; //deletes the rock if it hits the bottom
+			}
+		}
 		
 		//collision code
 		for (SpaceObj rock : rockList){
 			if (rock.getXcor() == playerShip.getXcor() && rock.getYcor() == playerShip.getYcor()){
 				running = false;
+			}
+		}
+		for (SpaceObj bomb : bombList){
+			if (bomb.getXcor() == playerShip.getXcor() && bomb.getYcor() == playerShip.getYcor()){
+				playerShip.setBomb(true);
 			}
 		}
 
