@@ -90,7 +90,7 @@ public class Game {
 		//System.out.println(playerShip.xcor + " " + playerShip.ycor);
 		
 
-		if ((tickCounter % 4) == ticksTillAdd) { // adds rocks each ticksTillAdd
+		if ((tickCounter % (ticksTillAdd + 1)) == ticksTillAdd) { // adds rocks each ticksTillAdd
 			for (int x = 0; x < numRocksToAdd; x++) {
 				rockList.add(new Rock(HEIGHT, WIDTH));
 			}
