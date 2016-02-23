@@ -148,7 +148,7 @@ public class Game {
 				updateFixedLogic();
 				tickCounter += 1;
 				timePassed -= timePerTick;
-				gamePainter.paint(playerShip, rockList);
+				gamePainter.paint(playerShip, rockList, bombList);
 			}
 
 
