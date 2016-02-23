@@ -65,7 +65,7 @@ public class Game {
 		
 		
 		cGame.timeOne = (double) System.nanoTime() / 1000000000; // convert to seconds
-		cGame.gamePainter.paint(cGame.playerShip, cGame.rockList);
+		cGame.gamePainter.paint(cGame.playerShip, cGame.rockList, cGame.bombList);
 		
 		//makes a thread for the consoleReader
 		cGame.bThread = new backThread(cGame.playerShip, HEIGHT, WIDTH, cGame.rockList);
