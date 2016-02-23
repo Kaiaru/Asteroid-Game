@@ -71,10 +71,15 @@ public class Painter {
 		System.out.println(line);
 	}
 
-	void updateScreen(SpaceObj ship, ArrayList<SpaceObj> rocks) {
+	void updateScreen(SpaceObj ship, ArrayList<SpaceObj> rocks, ArrayList<SpaceObj> bombs) {
 		
 		// clears the screen
 		this.resetScreen(height, width);
+		
+		for(SpaceObj bomb : bombs) {
+			screen[bomb.getYcor()].deleteCharAt(bomb.getXcor());
+			screen[bomb.getYcor()].insert(bomb.getXcor(), bomb.getPrintOut());
+		}
 		
 		// adds the rocks to the StringBuilder
 		for(SpaceObj rock : rocks) {
@@ -89,8 +94,8 @@ public class Painter {
 	}
 	
 	// updates the screen and prints it
-	void paint(SpaceObj ship, ArrayList<SpaceObj> rocks) {
-		this.updateScreen(ship, rocks);
+	void paint(SpaceObj ship, ArrayList<SpaceObj> rocks, ArrayList<SpaceObj> bombs) {
+		this.updateScreen(ship, rocks, bombs);
 		this.printScreen(height);
 	}
 
